@@ -131,7 +131,7 @@ class WikiEmbeds:
         embed.add_field(
             name="🌐 Verify MediaWiki Account",
             value=(
-                "🔒 **Do not share this link with anyone, including ATL staff.**\n"
+                "🔒 **Do not share this link with anyone, including FOSS Wiki staff.**\n"
                 f"\n**__{verification_url}__**\n"
             ),
             inline=False,
@@ -142,7 +142,7 @@ class WikiEmbeds:
                 "1. You'll be redirected to the wiki's OAuth page\n"
                 "2. Login with your MediaWiki account\n"
                 "3. Authorize the bot to verify your identity\n"
-                "4. If you meet the [requirements](https://atl.wiki/ATL:Discord_Linking), you'll automatically receive the wiki editor role\n\n"
+                "4. If you meet the [requirements](https://foss.wiki/FW:Discord_Linking), you'll automatically receive the wiki editor role\n\n"
                 "**⏰ Link expires in 10 minutes.**\n"
             ),
             inline=False,
@@ -167,7 +167,7 @@ class WikiEmbeds:
             title="✅ Verification Complete!",
             description=(
                 f"Successfully linked **{user.display_name}** to MediaWiki account **{wiki_username}**.\n\n"
-                "🎉 If you meet the requirement listed [here](https://atl.wiki/ATL:Discord_Linking) you have been granted Wiki Author!\n"
+                "🎉 If you meet the requirement listed [here](https://foss.wiki/FW:Discord_Linking) you have been granted Wiki Author!\n"
                 "📝 Thank you for contributing! You have gained access to VIP lounge and been granted extra permissions."
             ),
             color=EmbedColors.SUCCESS,

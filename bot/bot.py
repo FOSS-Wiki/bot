@@ -22,7 +22,7 @@ class WikiBot(commands.Bot):
         super().__init__(
             command_prefix=Config.DISCORD_PREFIX,
             intents=intents,
-            description="atl.wiki bot",
+            description="foss.wiki bot",
         )
 
         # Initialize components (respect feature flags)

@@ -1,4 +1,4 @@
-# ATL Wiki Bot
+# FOSS Wiki Bot
 
 A Discord bot system that verifies Discord users against MediaWiki accounts using OAuth, designed for the All Things Linux community.
 
@@ -62,7 +62,7 @@ This is a monorepo containing three main components:
 
 ```bash
 git clone <repository-url>
-cd atl-wiki-bot
+cd foss-wiki-bot
 cp env.example .env
 ```
 
@@ -122,7 +122,7 @@ docker compose up --watch
 ### Project Structure
 
 ```text
-atl-wiki-bot/
+foss-wiki-bot/
 ├── bot/                    # Discord Bot
 │   ├── commands/           # Slash commands
 │   │   └── verification.py # Verification commands

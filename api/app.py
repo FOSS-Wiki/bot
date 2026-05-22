@@ -164,8 +164,8 @@ def decode_jwt(token: str) -> Dict[str, Any]:
 def error_page(title: str, message: str):
     contact_html = (
         '<br><br>'
-        'Please report this error to atl.wiki staff '
-        '(<a href="https://atl.wiki/ATL:Contact" target="_blank" rel="noopener noreferrer">contact</a>).'
+        'Please report this error to foss.wiki staff '
+        '(<a href="https://foss.wiki/FW:Contact" target="_blank" rel="noopener noreferrer">contact</a>).'
     )
     return render_template_string(
         DARK_MODE_TEMPLATE,
