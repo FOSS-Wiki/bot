@@ -38,8 +38,8 @@ services:
       - ./pyproject.toml:/app/pyproject.toml
       - ./poetry.lock:/app/poetry.lock
     restart: unless-stopped
-    networks:
-      - wiki-link-network
+    # networks:
+    #   - wiki-link-network
     develop:
       watch:
         - action: sync
