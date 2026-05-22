@@ -33,6 +33,9 @@ assert JWT_SECRET is not None  # JWT_SECRET must be set
 JWT_ALGORITHM = "HS256"
 JWT_EXP_DELTA_SECONDS = 600  # 10 minutes
 
+# Feature flag to quickly disable the API without removing code
+ENABLE_API = False
+
 DARK_MODE_TEMPLATE = """
 <html lang="en">
     <head>
@@ -85,23 +88,38 @@ DARK_MODE_TEMPLATE = """
 </html>
 """
 
-if not all(
-    [
-        CONSUMER_KEY,
-        CONSUMER_SECRET,
-        MW_API_URL,
-        CALLBACK_URL,
-        app.secret_key,
-        JWT_SECRET,
-        MW_BASE_URL
-    ]
-):
-    raise RuntimeError("One or more required environment variables are missing.")
+if ENABLE_API:
+    if not all(
+        [
+            CONSUMER_KEY,
+            CONSUMER_SECRET,
+            MW_API_URL,
+            CALLBACK_URL,
+            app.secret_key,
+            JWT_SECRET,
+            MW_BASE_URL,
+        ]
+    ):
+        raise RuntimeError("One or more required environment variables are missing for the API.")
 
-# For type checker
-assert JWT_SECRET is not None
-assert MW_BASE_URL is not None
-assert MW_API_URL is not None
+    # For type checker
+    assert JWT_SECRET is not None
+    assert MW_BASE_URL is not None
+    assert MW_API_URL is not None
+else:
+    # If API is disabled, provide stub routes that inform it's disabled.
+    @app.route("/verify")
+    def verify_disabled():
+        return "Verification API is currently disabled.", 503
+
+    @app.route("/verify/callback")
+    def callback_disabled():
+        return "Verification API is currently disabled.", 503
+    # Do not proceed with further API setup
+    if __name__ == "__main__":
+        app.run(host="0.0.0.0", debug=False, port=5000)
+    # Stop executing module-level initialization
+    raise SystemExit("API disabled via ENABLE_API environment variable")
 
 request_token_url = f"{MW_BASE_URL}/Special:OAuth/initiate"
 access_token_url = f"{MW_BASE_URL}/Special:OAuth/token"

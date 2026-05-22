@@ -32,15 +32,24 @@ class Config:
     # Token expiry (in hours)
     TOKEN_EXPIRY_HOURS = 3
 
+    ENABLE_DB = False
+    ENABLE_VERIFICATION = False
+    ENABLE_AUTOLINKER = True
+    ENABLE_API = False
+
     @classmethod
     def validate(cls) -> None:
         """Validate that required environment variables are set."""
-        required_vars = [
-            ("DISCORD_TOKEN", cls.DISCORD_TOKEN),
-            ("DATABASE_URL", cls.DATABASE_URL),
-            ("VERIFICATION_URL", cls.VERIFICATION_URL),
-            ("MW_API_URL", cls.MW_API_URL),  # Add this line
-        ]
+        required_vars = [("DISCORD_TOKEN", cls.DISCORD_TOKEN)]
+
+        # Database only required if DB is enabled
+        if cls.ENABLE_DB:
+            required_vars.append(("DATABASE_URL", cls.DATABASE_URL))
+
+        # Verification and MW API only required if verification features are enabled
+        if cls.ENABLE_VERIFICATION:
+            required_vars.append(("VERIFICATION_URL", cls.VERIFICATION_URL))
+            required_vars.append(("MW_API_URL", cls.MW_API_URL))
 
         missing_vars = [name for name, value in required_vars if not value]
 

@@ -25,9 +25,9 @@ class WikiBot(commands.Bot):
             description="atl.wiki bot",
         )
 
-        # Initialize components
-        self.db = DatabaseManager()
-        self.tasks = BotTasks(self, self.db)
+        # Initialize components (respect feature flags)
+        self.db = DatabaseManager() if Config.ENABLE_DB else None
+        self.tasks = BotTasks(self, self.db) if Config.ENABLE_DB else None
 
     async def setup_hook(self):
         """Called when the bot is starting up."""
@@ -36,17 +36,20 @@ class WikiBot(commands.Bot):
         # Validate configuration
         Config.validate()
 
-        # Test and initialize database
-        if not self.db.test_connection():
-            raise RuntimeError("Failed to connect to database")
+        # Test and initialize database (if enabled)
+        if Config.ENABLE_DB:
+            if not self.db.test_connection():
+                raise RuntimeError("Failed to connect to database")
 
-        self.db.init_database()
+            self.db.init_database()
 
-        # Load commands
-        await setup_verification_commands(self)
-        
-        await setup_autolinker(self)
-        
+        # Load commands (respect flags)
+        if Config.ENABLE_VERIFICATION:
+            await setup_verification_commands(self)
+
+        if Config.ENABLE_AUTOLINKER:
+            await setup_autolinker(self)
+
         # Sync command tree
         await self.tree.sync()
         print("✅ Command tree synced")
@@ -55,8 +58,9 @@ class WikiBot(commands.Bot):
         """Called when the bot is ready."""
         print(f"🤖 Logged in as {self.user}!")
 
-        # Start background tasks
-        self.tasks.start_tasks()
+        # Start background tasks (if any)
+        if self.tasks:
+            self.tasks.start_tasks()
 
         print("✅ Bot is ready!")
 
@@ -64,8 +68,9 @@ class WikiBot(commands.Bot):
         """Clean shutdown."""
         print("🛑 Shutting down bot...")
 
-        # Stop background tasks
-        self.tasks.stop_tasks()
+        # Stop background tasks (if any)
+        if self.tasks:
+            self.tasks.stop_tasks()
 
         # Close database connections and parent
         await super().close()
