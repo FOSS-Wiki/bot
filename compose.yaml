@@ -1,36 +1,36 @@
 services:
-  db:
-    image: postgres:17.7
-    container_name: wiki-link-db
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER:-wiki-link-user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
-      POSTGRES_DB: ${POSTGRES_DB:-wiki-link-db}
-    volumes:
-      - wiki-link-data:/var/lib/postgresql/data
-    restart: unless-stopped
-    healthcheck:
-      test:
-        [
-          'CMD-SHELL',
-          'pg_isready -U ${POSTGRES_USER:-wiki-link-user} -d ${POSTGRES_DB:-wiki-link-db}',
-        ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    networks:
-      - wiki-link-network
-    expose:
-      - '5432'
+  # db:
+  #   image: postgres:17.7
+  #   container_name: wiki-link-db
+  #   environment:
+  #     POSTGRES_USER: ${POSTGRES_USER:-wiki-link-user}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+  #     POSTGRES_DB: ${POSTGRES_DB:-wiki-link-db}
+  #   volumes:
+  #     - wiki-link-data:/var/lib/postgresql/data
+  #   restart: unless-stopped
+  #   healthcheck:
+  #     test:
+  #       [
+  #         'CMD-SHELL',
+  #         'pg_isready -U ${POSTGRES_USER:-wiki-link-user} -d ${POSTGRES_DB:-wiki-link-db}',
+  #       ]
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 5
+  #   networks:
+  #     - wiki-link-network
+  #   expose:
+  #     - '5432'
 
   bot:
     build:
       context: .
       dockerfile: Dockerfile.bot
     container_name: wiki-link-bot
-    depends_on:
-      db:
-        condition: service_healthy
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
     env_file:
       - .env
     volumes:
@@ -50,40 +50,40 @@ services:
         - action: rebuild
           path: ./poetry.lock
 
-  api:
-    build:
-      context: .
-      dockerfile: Dockerfile.api
-    container_name: wiki-link-api
-    depends_on:
-      db:
-        condition: service_healthy
-    env_file:
-      - .env
-    ports:
-      - '100.64.3.0:5000:5000'
-    volumes:
-      - ./api:/app/api
-      - ./pyproject.toml:/app/pyproject.toml
-      - ./poetry.lock:/app/poetry.lock
-    restart: unless-stopped
-    networks:
-      - wiki-link-network
-    develop:
-      watch:
-        - action: sync
-          path: ./api
-          target: /app/api
-        - action: rebuild
-          path: ./pyproject.toml
-        - action: rebuild
-          path: ./poetry.lock
+  # api:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.api
+  #   container_name: wiki-link-api
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - '100.64.3.0:5000:5000'
+  #   volumes:
+  #     - ./api:/app/api
+  #     - ./pyproject.toml:/app/pyproject.toml
+  #     - ./poetry.lock:/app/poetry.lock
+  #   restart: unless-stopped
+  #   networks:
+  #     - wiki-link-network
+  #   develop:
+  #     watch:
+  #       - action: sync
+  #         path: ./api
+  #         target: /app/api
+  #       - action: rebuild
+  #         path: ./pyproject.toml
+  #       - action: rebuild
+  #         path: ./poetry.lock
 
-networks:
-  wiki-link-network:
-    name: wiki-link-network
-    driver: bridge
+# networks:
+#   wiki-link-network:
+#     name: wiki-link-network
+#     driver: bridge
 
-volumes:
-  wiki-link-data:
-    name: wiki-link-data
+# volumes:
+#   wiki-link-data:
+#     name: wiki-link-data
