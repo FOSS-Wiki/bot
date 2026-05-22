@@ -4,8 +4,11 @@ WORKDIR /app
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
+    build-essential \
     gcc \
     libpq-dev \
+    libffi-dev \
+    pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy dependency files
@@ -13,6 +16,9 @@ COPY pyproject.toml poetry.lock* ./
 
 # Install Poetry
 RUN pip install poetry
+
+# Ensure packaging tools are up-to-date to avoid build backend issues
+RUN pip install --upgrade pip setuptools wheel
 
 # Configure poetry to not create virtual environment
 RUN poetry config virtualenvs.create false
@@ -30,4 +36,4 @@ USER app
 
 # Run the bot with watchdog for hot reloading in development
 # Use watchmedo to monitor file changes and restart the bot
-CMD ["watchmedo", "auto-restart", "--directory=./bot", "--pattern=*.py", "--recursive", "--", "python", "-m", "bot.main"] 
+CMD ["watchmedo", "auto-restart", "--directory=./bot", "--pattern=*.py", "--recursive", "--", "python", "-m", "bot.main"]
