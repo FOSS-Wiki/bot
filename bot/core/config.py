@@ -21,9 +21,29 @@ class Config:
     MW_API_URL = os.getenv("MW_API_URL")
 
     # Role settings
-    WIKI_AUTHOR_ROLE_ID = int(os.getenv("WIKI_AUTHOR_ROLE_ID", "0"))
+    # Role settings
+    # Safely parse optional integer env vars — guard against empty strings
+    _wiki_role_raw = os.getenv("WIKI_AUTHOR_ROLE_ID", "")
+    try:
+        WIKI_AUTHOR_ROLE_ID = int(_wiki_role_raw) if _wiki_role_raw and _wiki_role_raw.strip() != "" else 0
+    except (TypeError, ValueError):
+        WIKI_AUTHOR_ROLE_ID = 0
+
     # Bot admin role IDs (not Discord admin permissions) - users with these roles can use admin commands
-    ALLOWED_ROLE_IDS = list(map(int, os.getenv("ALLOWED_ROLE_IDS", "").split(",")))
+    _allowed_raw = os.getenv("ALLOWED_ROLE_IDS", "")
+    if _allowed_raw and _allowed_raw.strip() != "":
+        ALLOWED_ROLE_IDS = []
+        for _part in _allowed_raw.split(","):
+            _p = _part.strip()
+            if not _p:
+                continue
+            try:
+                ALLOWED_ROLE_IDS.append(int(_p))
+            except ValueError:
+                # ignore invalid entries
+                continue
+    else:
+        ALLOWED_ROLE_IDS = []
 
     # Task intervals (in minutes)
     PURGE_INTERVAL = 30
