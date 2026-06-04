@@ -24,6 +24,7 @@ class WikiBot(commands.Bot):
             command_prefix=Config.DISCORD_PREFIX,
             intents=intents,
             description="foss.wiki bot",
+            help_command=None,
         )
 
         # Initialize components (respect feature flags)
