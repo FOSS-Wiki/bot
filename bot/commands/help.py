@@ -1,4 +1,5 @@
 import discord
+from discord import app_commands
 from discord.ext import commands
 
 
@@ -9,6 +10,7 @@ class Help(commands.Cog):
         self.bot = bot
 
     @commands.hybrid_command(name="help", description="Show help", aliases=["commands"])
+    @app_commands.default_permissions()
     async def help(self, ctx: commands.Context, *, command_name: str = None):
         await ctx.defer(ephemeral=True)
 
