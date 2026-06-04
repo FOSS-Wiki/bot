@@ -7,6 +7,7 @@ from .core.database import DatabaseManager
 from .core.tasks import BotTasks
 from .commands.verification import setup as setup_verification_commands
 from .commands.linker import setup as setup_autolinker
+from .commands.help import setup as setup_help_commands
 
 class WikiBot(commands.Bot):
     """Main Discord bot class."""
@@ -49,6 +50,9 @@ class WikiBot(commands.Bot):
 
         if Config.ENABLE_AUTOLINKER:
             await setup_autolinker(self)
+
+        # Help command (always enabled)
+        await setup_help_commands(self)
 
         # Sync command tree
         await self.tree.sync()
