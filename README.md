@@ -1,7 +1,7 @@
 # FOSS Wiki Bot
 
 > [!WARNING]
-> The bot is pending a rewrite, please note that it is not in a particualy stable state and right now the verification functionality is disabled through hard coding. The only functionality right now is the autolinker. 
+> The bot is pending a rewrite, please note that it is not in a particualy stable state and right now the verification functionality is disabled through hard coding with the only active functionality right now being the autolinker. This branch is just to keep the bot functional and to disable the verification, expect the new bot to be in a new repo or on a fresh branch once development commences. 
 
 A Discord bot system that verifies Discord users against MediaWiki accounts using OAuth, designed for the All Things Linux community.
 
