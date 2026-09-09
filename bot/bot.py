@@ -53,14 +53,6 @@ class WikiBot(commands.Bot):
         # Help command (always enabled)
         await setup_help_commands(self)
 
-<<<<<<< Updated upstream
-=======
-        # Load commands
-        await setup_verification_commands(self)
-
-        await setup_autolinker(self)
-
->>>>>>> Stashed changes
         # Sync command tree
         await self.tree.sync()
         print("✅ Command tree synced")
