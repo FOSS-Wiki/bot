@@ -1,0 +1,9 @@
+services:
+  wiki-bot:
+    build: .
+    container_name: wiki-bot
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    restart: unless-stopped
